@@ -1,0 +1,4 @@
+include ':entities'
+include ':core'
+include ':app'
+rootProject.name = "NYTimesApp"
