@@ -17,6 +17,7 @@ import dagger.android.AndroidInjection
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
 import kotlinx.android.synthetic.main.activity_articles_pane.*
+import kotlinx.android.synthetic.main.layout_screen_loading.*
 import javax.inject.Inject
 
 /**
@@ -59,7 +60,6 @@ class ArticlesActivity : BaseActivity(), HasSupportFragmentInjector {
         initViewModel()
         setupRecyclerView()
         initMostPopularArticlesLiveData()
-        initSwipToRefresh()
     }
 
     private fun initViewModel() {
@@ -75,10 +75,10 @@ class ArticlesActivity : BaseActivity(), HasSupportFragmentInjector {
     private fun initMostPopularArticlesLiveData() {
         viewModel.mostPopularArticlesLiveData.observe(this, Observer {
             when(it) {
-                is DataResource.Loading -> startLoading(swipeToRefresh)
+                is DataResource.Loading -> startLoading(pbLoading)
                 is DataResource.Success -> {
-                    stopLoading(swipeToRefresh)
-                    it.value?.results?.let { data -> renderData(data) }
+                    stopLoading(pbLoading)
+                    renderData(it.value)
                 }
                 is DataResource.Failure -> onLoadDataFailure(it.errorEntity)
             }
@@ -88,12 +88,5 @@ class ArticlesActivity : BaseActivity(), HasSupportFragmentInjector {
     private fun renderData(articles: List<ArticleEntity>) {
         adapter.addItems(articles)
         adapter.notifyDataSetChanged()
-    }
-
-    private fun initSwipToRefresh() {
-        swipeToRefresh.setOnRefreshListener {
-            adapter.resetItems()
-//            viewModel.getMostPopularArticles(1)
-        }
     }
 }

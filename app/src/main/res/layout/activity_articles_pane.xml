@@ -6,24 +6,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipeToRefresh"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvArticles"
+        android:name="com.nytimesapp.ItemListFragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        android:layout_height="match_parent"
+        app:layoutManager="LinearLayoutManager"
+        tools:context=".presentation.ui.articles.ArticlesActivity"
+        tools:listitem="@layout/activity_articles_item" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvArticles"
-            android:name="com.nytimesapp.ItemListFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layoutManager="LinearLayoutManager"
-            tools:context=".presentation.ui.articles.ArticlesActivity"
-            tools:listitem="@layout/activity_articles_item" />
-
-
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    <include layout="@layout/layout_screen_loading"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
