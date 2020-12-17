@@ -1,8 +1,8 @@
 package com.nytimes.entities.articles
 
 data class MediaMetaDataEntity (
-	val url : String?,
-	val format : String?,
-	val height : Int?,
-	val width : Int?
+	val url : String? = null,
+	val format : String? = null,
+	val height : Int? = null,
+	val width : Int? = null
 )

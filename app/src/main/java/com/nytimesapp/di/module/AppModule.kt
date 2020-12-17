@@ -19,5 +19,5 @@ object AppModule {
     @Provides
     @Singleton
     fun provideSharedPrefs(application: Application): SharedPreferences =
-        application.getSharedPreferences("myfatoorah-shared-prefs", Context.MODE_PRIVATE)
+        application.getSharedPreferences("nytimes-shared-prefs", Context.MODE_PRIVATE)
 }

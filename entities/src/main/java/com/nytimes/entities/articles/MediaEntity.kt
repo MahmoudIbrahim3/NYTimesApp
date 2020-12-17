@@ -1,10 +1,10 @@
 package com.nytimes.entities.articles
 
 data class MediaEntity (
-	val type : String?,
-	val subtype : String?,
-	val caption : String?,
-	val copyright : String?,
-	val approved_for_syndication : Int?,
-	val mediasMetaData : List<MediaMetaDataEntity>?
+	val type : String? = null,
+	val subtype : String? = null,
+	val caption : String? = null,
+	val copyright : String? = null,
+	val approved_for_syndication : Int? = null,
+	val mediasMetaData : List<MediaMetaDataEntity>? = null
 )

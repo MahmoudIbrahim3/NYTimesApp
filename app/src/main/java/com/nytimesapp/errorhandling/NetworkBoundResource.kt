@@ -1,57 +1,99 @@
 package com.nytimesapp.errorhandling
 
-import androidx.lifecycle.MutableLiveData
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import okhttp3.ResponseBody
-import retrofit2.HttpException
-import java.io.IOException
-import java.net.HttpURLConnection
+import androidx.annotation.MainThread
+import androidx.annotation.WorkerThread
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
+import com.nytimesapp.data.remote.api.ApiEmptyResponse
+import com.nytimesapp.data.remote.api.ApiErrorResponse
+import com.nytimesapp.data.remote.api.ApiResponse
+import com.nytimesapp.data.remote.api.ApiSuccessResponse
 
-// Should use Dispatchers.IO because this is used with the Networking requests.
-suspend fun <T> networkBoundResource (
-    result: MutableLiveData<DataResource<T>>? = null,
-    apiCall: suspend () -> T
-): MutableLiveData<DataResource<T>>? = withContext(Dispatchers.IO) {
-    try {
-        result?.postValue(DataResource.Loading)
-        val response = apiCall.invoke()
-        result?.postValue(DataResource.Success(response))
+abstract class NetworkBoundResource<ResultType, RequestType>
+@MainThread constructor(private val appExecutors: AppExecutors) {
 
-    } catch (throwable: Throwable) {
-        when (throwable) {
-            is IOException -> result?.postValue(DataResource.Failure(ErrorEntity.Network))
-            is HttpException -> {
-                val errorResponse = convertErrorBody(throwable)
-                when (throwable.code()) {
-                    HttpURLConnection.HTTP_INTERNAL_ERROR ->
-                        result?.postValue(DataResource.Failure(ErrorEntity.ServerError))
-                    HttpURLConnection.HTTP_UNAUTHORIZED ->
-                        result?.postValue(DataResource.Failure(ErrorEntity.UnAuthorized))
-                    HttpURLConnection.HTTP_NOT_FOUND ->
-                        result?.postValue(DataResource.Failure(ErrorEntity.NotFound))
-                    else ->
-                        if (errorResponse == null)
-                            result?.postValue(DataResource.Failure(ErrorEntity.UnKnown))
-                        else
-                            result?.postValue(DataResource.Failure(ErrorEntity.Business(errorResponse)))
+    private val result = MediatorLiveData<DataResource<ResultType>>()
+
+    init {
+        result.value = DataResource.Loading
+        @Suppress("LeakingThis")
+        val dbSource = loadFromDb()
+        result.addSource(dbSource) { data ->
+            result.removeSource(dbSource)
+            if (shouldFetch(data)) {
+                fetchFromNetwork(dbSource)
+            } else {
+                result.addSource(dbSource) { newData ->
+                    setValue(DataResource.Success(newData))
                 }
             }
-            else ->
-                result?.postValue(DataResource.Failure(ErrorEntity.UnKnown))
         }
     }
 
-    result
-}
-
-private fun convertErrorBody(throwable: HttpException): ResponseBody? {
-    return try {
-        throwable.response()?.errorBody()?.let {
-            return throwable.response()?.errorBody()
+    @MainThread
+    private fun setValue(newValue: DataResource<ResultType>) {
+        if (result.value != newValue) {
+            result.value = newValue
         }
-    } catch (exception: Exception) {
-        exception.printStackTrace()
-        null
     }
+
+    private fun fetchFromNetwork(dbSource: LiveData<ResultType>) {
+        val apiResponse = createCall()
+        // we re-attach dbSource as a new source, it will dispatch its latest value quickly
+        result.addSource(dbSource) { newData ->
+            setValue(DataResource.Loading)
+        }
+        result.addSource(apiResponse) { response ->
+            result.removeSource(apiResponse)
+            result.removeSource(dbSource)
+            when (response) {
+                is ApiSuccessResponse -> {
+                    appExecutors.diskIO().execute {
+                        saveCallResult(processResponse(response))
+                        appExecutors.mainThread().execute {
+                            // we specially request a new live data,
+                            // otherwise we will get immediately last cached value,
+                            // which may not be updated with latest results received from network.
+                            result.addSource(loadFromDb()) { newData ->
+                                setValue(DataResource.Success(newData))
+                            }
+                        }
+                    }
+                }
+                is ApiEmptyResponse -> {
+                    appExecutors.mainThread().execute {
+                        // reload from disk whatever we had
+                        result.addSource(loadFromDb()) { newData ->
+                            setValue(DataResource.Success(newData))
+                        }
+                    }
+                }
+                is ApiErrorResponse -> {
+                    onFetchFailed()
+                    result.addSource(dbSource) { newData ->
+//                        setValue(DataResource.Failure(response.errorMessage))
+                    }
+                }
+            }
+        }
+    }
+
+    protected open fun onFetchFailed() {}
+
+    fun asLiveData() = result as LiveData<DataResource<ResultType>>
+
+    @WorkerThread
+    protected open fun processResponse(response: ApiSuccessResponse<RequestType>) = response.body
+
+    @WorkerThread
+    protected abstract fun saveCallResult(item: RequestType): Unit?
+
+    @MainThread
+    protected abstract fun shouldFetch(data: ResultType?): Boolean
+
+    @MainThread
+    protected abstract fun loadFromDb(): LiveData<ResultType>
+
+    @MainThread
+    protected abstract fun createCall(): LiveData<ApiResponse<RequestType>>
 }

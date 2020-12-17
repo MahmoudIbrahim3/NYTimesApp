@@ -7,8 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import com.google.gson.Gson
+import com.nytimes.entities.articles.ArticleEntity
 import com.nytimesapp.R
-import com.nytimesapp.dummy.DummyContent
+import com.nytimesapp.presentation.utils.AppConst
 
 /**
  * A fragment representing a single Item detail screen.
@@ -18,21 +20,20 @@ import com.nytimesapp.dummy.DummyContent
  */
 class ArticleDetailFragment : Fragment() {
 
-    /**
-     * The dummy content this fragment is presenting.
-     */
-    private var item: DummyContent.DummyItem? = null
+    private var item: ArticleEntity? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         arguments?.let {
-            if (it.containsKey(ARG_ITEM_ID)) {
-                // Load the dummy content specified by the fragment
-                // arguments. In a real-world scenario, use a Loader
-                // to load content from a content provider.
-                item = DummyContent.ITEM_MAP[it.getString(ARG_ITEM_ID)]
-                activity?.findViewById<CollapsingToolbarLayout>(R.id.toolbar_layout)?.title = item?.content
+            if (it.containsKey(AppConst.INTENT_ITEM_ENTITY)) {
+                item = Gson().fromJson<ArticleEntity>(
+                    it.getString(AppConst.INTENT_ITEM_ENTITY),
+                    ArticleEntity::class.java
+                )
+
+                activity?.findViewById<CollapsingToolbarLayout>(R.id.toolbar_layout)?.title =
+                    item?.title
             }
         }
     }
@@ -41,19 +42,10 @@ class ArticleDetailFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         val rootView = inflater.inflate(R.layout.item_detail, container, false)
 
-        // Show the dummy content as text in a TextView.
         item?.let {
-            rootView.findViewById<TextView>(R.id.item_detail).text = it.details
+            rootView.findViewById<TextView>(R.id.item_detail).text = it.abstract
         }
 
         return rootView
-    }
-
-    companion object {
-        /**
-         * The fragment argument representing the item ID that this fragment
-         * represents.
-         */
-        const val ARG_ITEM_ID = "item_id"
     }
 }

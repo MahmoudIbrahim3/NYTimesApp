@@ -4,6 +4,7 @@ import com.nytimesapp.data.remote.api.ArticlesApi
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.nytimesapp.presentation.utils.AppConst
+import com.nytimesapp.utils.LiveDataCallAdapterFactory
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -43,6 +44,7 @@ object ApiModule {
     fun provideRetrofit(gson: Gson?, okHttpClient: OkHttpClient?): Retrofit {
         return Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create(gson))
+            .addCallAdapterFactory(LiveDataCallAdapterFactory())
             .baseUrl(AppConst.BASE_URL)
             .client(okHttpClient)
             .build()

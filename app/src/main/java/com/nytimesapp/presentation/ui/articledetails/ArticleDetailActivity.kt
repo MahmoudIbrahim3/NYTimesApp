@@ -4,12 +4,12 @@ import android.content.Intent
 import android.os.Bundle
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
-import androidx.appcompat.app.AppCompatActivity
 import android.view.MenuItem
 import androidx.fragment.app.Fragment
 import com.nytimesapp.presentation.ui.articles.ArticlesActivity
 import com.nytimesapp.R
 import com.nytimesapp.presentation.ui.base.BaseActivity
+import com.nytimesapp.presentation.utils.AppConst
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
 import javax.inject.Inject
@@ -29,12 +29,12 @@ class ArticleDetailActivity : BaseActivity(), HasSupportFragmentInjector {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_item_detail)
+        setContentView(R.layout.activity_article_detail)
         setSupportActionBar(findViewById(R.id.detail_toolbar))
 
         findViewById<FloatingActionButton>(R.id.fab).setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own detail action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
+                .setAction("Action", null).show()
         }
 
         // Show the Up button in the action bar.
@@ -54,16 +54,17 @@ class ArticleDetailActivity : BaseActivity(), HasSupportFragmentInjector {
             // using a fragment transaction.
             val fragment = ArticleDetailFragment()
                 .apply {
-                arguments = Bundle().apply {
-                    putString(
-                        ArticleDetailFragment.ARG_ITEM_ID,
-                            intent.getStringExtra(ArticleDetailFragment.ARG_ITEM_ID))
+                    arguments = Bundle().apply {
+                        putString(
+                            AppConst.INTENT_ITEM_ENTITY,
+                            intent.getStringExtra(AppConst.INTENT_ITEM_ENTITY)
+                        )
+                    }
                 }
-            }
 
             supportFragmentManager.beginTransaction()
-                    .add(R.id.item_detail_container, fragment)
-                    .commit()
+                .add(R.id.item_detail_container, fragment)
+                .commit()
         }
     }
 

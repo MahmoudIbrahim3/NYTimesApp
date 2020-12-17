@@ -32,5 +32,6 @@
     <dimen name="size_secondary_text">14sp</dimen>
     <dimen name="size_third_text">12sp</dimen>
     <dimen name="size_fourth_text">10sp</dimen>
+    <dimen name="size_text_header">18sp</dimen>
 
 </resources>

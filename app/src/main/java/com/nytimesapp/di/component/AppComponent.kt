@@ -1,4 +1,4 @@
-package com.devo.mahmoud.di.component
+package com.nytimesapp.di.component
 
 import android.app.Application
 import com.nytimesapp.NYTimesApplication
@@ -14,6 +14,7 @@ import javax.inject.Singleton
 @Component(modules = [
     AndroidInjectionModule::class,
     AndroidSupportInjectionModule::class,
+    DbModule::class,
     ApiModule::class,
     AppModule::class,
     ViewModelModule::class,

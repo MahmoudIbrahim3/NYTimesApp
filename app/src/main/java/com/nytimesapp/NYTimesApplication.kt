@@ -1,7 +1,7 @@
 package com.nytimesapp
 
 import android.app.Activity
-import com.devo.mahmoud.di.component.DaggerAppComponent
+import com.nytimesapp.di.component.DaggerAppComponent
 import dagger.android.AndroidInjector
 import dagger.android.DaggerApplication
 import dagger.android.DispatchingAndroidInjector
