@@ -5,6 +5,7 @@
     <color name="colorAccent">#03DAC5</color>
 
     <color name="app_background">#f1f9fc</color>
+    <color name="divider">#c4c4c4</color>
 
     <color name="primary_text">#212121</color>
     <color name="secondary_text">#aaaaaa</color>

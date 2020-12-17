@@ -1,9 +1,9 @@
 package com.nytimesapp.presentation.ui.articles
 
 import android.os.Bundle
-import androidx.core.widget.NestedScrollView
-import androidx.appcompat.widget.Toolbar
-import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.nytimes.entities.articles.ArticleEntity
@@ -11,51 +11,56 @@ import com.nytimesapp.R
 import com.nytimesapp.di.ViewModelFactory
 
 import com.nytimesapp.errorhandling.DataResource
-import com.nytimesapp.presentation.ui.articledetails.ArticleDetailActivity
-import com.nytimesapp.presentation.ui.base.BaseActivity
-import dagger.android.AndroidInjection
-import dagger.android.DispatchingAndroidInjector
-import dagger.android.support.HasSupportFragmentInjector
+import com.nytimesapp.presentation.ui.base.BaseFragment
+import com.nytimesapp.utils.OpenForTesting
+import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.activity_articles_pane.*
 import kotlinx.android.synthetic.main.layout_screen_loading.*
 import javax.inject.Inject
 
-/**
- * An activity representing a list of Pings. This activity
- * has different presentations for handset and tablet-size devices. On
- * handsets, the activity presents a list of items, which when touched,
- * lead to a [ArticleDetailActivity] representing
- * item details. On tablets, the activity presents the list of items and
- * item details side-by-side using two vertical panes.
- */
-class ArticlesActivity : BaseActivity(), HasSupportFragmentInjector {
+@OpenForTesting
+class ArticlesFragment : BaseFragment() {
+
+    private var isTablet: Boolean = false
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
     private lateinit var viewModel: ArticlesViewModel
     private lateinit var adapter: ArticlesRecyclerViewAdapter
 
-    @Inject
-    lateinit var dispatchingSupportFragmentInjector: DispatchingAndroidInjector<Fragment>
-    override fun supportFragmentInjector() =
-        dispatchingSupportFragmentInjector
-
     // Whether or not the activity is in two-pane mode, i.e. running on a tablet device.
     private var twoPane: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        AndroidInjection.inject(this)
+        AndroidSupportInjection.inject(this)
 
-        setContentView(R.layout.activity_articles)
+    }
 
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        setSupportActionBar(toolbar)
-        toolbar.title = title
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        lateinit var view: View
 
-        if (findViewById<NestedScrollView>(R.id.item_detail_container) != null) {
-            twoPane = true
+        isTablet = requireContext().resources.getBoolean(R.bool.isTablet)
+
+        when {
+            isTablet -> {
+                view = inflater.inflate(R.layout.fragment_articles_land, container, false)
+//                displayMasterDetailLayout(view)
+            }
+            else -> {
+                view = inflater.inflate(R.layout.fragment_articles, container, false)
+//                displaySingleLayout(view)
+            }
         }
+
+        return view
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
 
         initViewModel()
         setupRecyclerView()
@@ -68,12 +73,12 @@ class ArticlesActivity : BaseActivity(), HasSupportFragmentInjector {
     }
 
     private fun setupRecyclerView() {
-        adapter = ArticlesRecyclerViewAdapter(this, twoPane)
+        adapter = ArticlesRecyclerViewAdapter(isTablet)
         rvArticles.adapter = adapter
     }
 
     private fun initMostPopularArticlesLiveData() {
-        viewModel.mostPopularArticlesLiveData.observe(this, Observer {
+        viewModel.mostPopularArticlesLiveData.observe(viewLifecycleOwner, Observer {
             when(it) {
                 is DataResource.Loading -> startLoading(pbLoading)
                 is DataResource.Success -> {

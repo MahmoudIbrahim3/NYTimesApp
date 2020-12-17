@@ -11,6 +11,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.nytimesapp.data.local.DataManager
 import com.nytimesapp.errorhandling.ErrorEntity
 import com.nytimesapp.R
+import com.nytimesapp.utils.OpenForTesting
 import kotlinx.android.synthetic.main.layout_screen_loading.*
 import okhttp3.ResponseBody
 import javax.inject.Inject

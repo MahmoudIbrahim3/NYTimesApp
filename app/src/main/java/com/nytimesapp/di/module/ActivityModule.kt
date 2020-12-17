@@ -1,7 +1,7 @@
 package com.nytimesapp.di.module
 
-import com.nytimesapp.presentation.ui.articledetails.ArticleDetailActivity
-import com.nytimesapp.presentation.ui.articles.ArticlesActivity
+import com.nytimesapp.presentation.MainActivity
+import com.nytimesapp.presentation.ui.articles.ArticlesFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -9,9 +9,5 @@ import dagger.android.ContributesAndroidInjector
 abstract class ActivityModule {
 
     @ContributesAndroidInjector(modules = [FragmentModule::class])
-    abstract fun contributeArticleActivity(): ArticlesActivity
-
-    @ContributesAndroidInjector
-    abstract fun contributeArticleDetailActivity(): ArticleDetailActivity
-
+    abstract fun contributeMainActivity(): MainActivity
 }
