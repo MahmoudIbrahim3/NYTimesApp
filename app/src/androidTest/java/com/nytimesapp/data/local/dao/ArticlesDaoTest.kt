@@ -12,7 +12,7 @@ import org.junit.Rule
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class ArticleDaoTest: AppDatabaseTest() {
+class ArticlesDaoTest: AppDatabaseTest() {
 
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()

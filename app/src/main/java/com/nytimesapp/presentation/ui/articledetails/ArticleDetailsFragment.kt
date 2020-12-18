@@ -51,7 +51,10 @@ class ArticleDetailsFragment : BaseFragment() {
 
     override fun onStart() {
         super.onStart()
-        (activity as MainActivity).setActionBarTitle(item?.section, true)
+        if(requireContext().resources.getBoolean(R.bool.isTwoPane))
+            (activity as MainActivity).setActionBarTitle(item?.section, false)
+        else
+            (activity as MainActivity).setActionBarTitle(item?.section, true)
     }
 
     private fun fillDataOnUI() {

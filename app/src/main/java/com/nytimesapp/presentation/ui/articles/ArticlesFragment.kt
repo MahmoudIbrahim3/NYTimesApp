@@ -40,7 +40,7 @@ class ArticlesFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        twoPane = requireContext().resources.getBoolean(R.bool.isTablet)
+        twoPane = requireContext().resources.getBoolean(R.bool.isTwoPane)
 
         return when {
             twoPane ->
@@ -98,10 +98,7 @@ class ArticlesFragment : BaseFragment() {
             val arg = Bundle()
             arg.putString(AppConst.INTENT_ITEM_ENTITY, Gson().toJson(it, ArticleEntity::class.java))
             if (twoPane) {
-                val navHostFragment = childFragmentManager.findFragmentById(
-                    R.id.article_nav_container
-                ) as NavHostFragment
-                navHostFragment.navController.navigate(R.id.articleDetailFragment, arg)
+                navigateToArticleDetailsFragment(arg)
             } else {
                 findNavController().navigate(
                     R.id.action_articlesFragment_to_articleDetailActivity, arg
@@ -110,10 +107,29 @@ class ArticlesFragment : BaseFragment() {
         })
     }
 
+    private fun navigateToArticleDetailsFragment(arg: Bundle) {
+        val navHostFragment = childFragmentManager.findFragmentById(
+            R.id.article_nav_container
+        ) as NavHostFragment
+        navHostFragment.navController.navigate(R.id.articleDetailFragment, arg)
+    }
+
     private fun renderData(articles: List<ArticleEntity>) {
         adapter.resetItems()
         adapter.addItems(articles)
         adapter.notifyDataSetChanged()
+        showFirstArticleForTwoPane()
+    }
+
+    private fun showFirstArticleForTwoPane() {
+        if (twoPane) {
+            val arg = Bundle()
+            arg.putString(
+                AppConst.INTENT_ITEM_ENTITY,
+                Gson().toJson(adapter.getItems()[0], ArticleEntity::class.java)
+            )
+            navigateToArticleDetailsFragment(arg)
+        }
     }
 
     private fun initSwipeToRefresh() {
