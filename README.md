@@ -7,7 +7,7 @@ NYTimesApp
 
 1- `app` module: consists of two layers:-
 
-    * Presentation Layer: responsible for any thing related to the UI exists in this
+    * Presentation Layer: any thing related to the UI exists in this
     layer, which the MVVM pattern applied in this layer.
            
     * Data Layer: provide the data either from the local database or from the network 
