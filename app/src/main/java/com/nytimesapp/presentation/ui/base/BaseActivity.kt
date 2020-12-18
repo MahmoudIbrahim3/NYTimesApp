@@ -2,17 +2,14 @@ package com.nytimesapp.presentation.ui.base
 
 import android.app.AlertDialog
 import android.view.View
-import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.snackbar.Snackbar
 import com.nytimesapp.data.local.DataManager
-import com.nytimesapp.data.utils.ErrorEntity
 import com.nytimesapp.R
 import kotlinx.android.synthetic.main.layout_screen_loading.*
-import okhttp3.ResponseBody
 import javax.inject.Inject
 
 open class BaseActivity: AppCompatActivity(), BaseListener {
@@ -39,23 +36,16 @@ open class BaseActivity: AppCompatActivity(), BaseListener {
             (pbLoading as ProgressBar).visibility = View.GONE
     }
 
-    override fun onLoadDataFailure(errorEntity: ErrorEntity) {
-        when (errorEntity) {
+    override fun onLoadDataFailure(errorMsg: String) {
+        showSnackBar(errorMsg)
+        /*when (errorEntity) {
             is ErrorEntity.Business -> onBusinessError(errorEntity.error)
             is ErrorEntity.Network -> showSnackBar(getString(R.string.internet_connection_error))
             is ErrorEntity.UnAuthorized -> showSnackBar("UnAuthorized")
             is ErrorEntity.ServerError -> onServerError()
             is ErrorEntity.NotFound -> showSnackBar("NotFound")
             is ErrorEntity.UnKnown -> showSnackBar("UnKnown")
-        }
-    }
-
-    override fun onBusinessError(responseBody: ResponseBody?) {
-
-    }
-
-    override fun onServerError() {
-        showSnackBar(resources.getString(R.string.server_error))
+        }*/
     }
 
     override fun showSnackBar(msg: String) {
@@ -84,10 +74,5 @@ open class BaseActivity: AppCompatActivity(), BaseListener {
 
         alertDialog = builder1.create()
         alertDialog.show()
-    }
-
-    override fun onErrorField(editText: EditText?, msg: String) {
-        editText!!.requestFocus()
-        editText.error = msg
     }
 }

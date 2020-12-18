@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import com.google.gson.Gson
@@ -19,7 +18,6 @@ import com.nytimesapp.presentation.MainActivity
 import com.nytimesapp.presentation.ui.base.BaseFragment
 import com.nytimesapp.presentation.utils.AppConst
 import dagger.android.support.AndroidSupportInjection
-import kotlinx.android.synthetic.main.activity_articles_pane.rvArticles
 import kotlinx.android.synthetic.main.fragment_articles.*
 import javax.inject.Inject
 
@@ -63,22 +61,6 @@ class ArticlesFragment : BaseFragment() {
         viewModel.refresh()
     }
 
-    private fun initOnArticleClickLiveData() {
-        adapter.onArticleClickedLiveData.observe(viewLifecycleOwner, Observer {
-            val arg = Bundle()
-            arg.putString(AppConst.INTENT_ITEM_ENTITY, Gson().toJson(it, ArticleEntity::class.java))
-            if(twoPane) {
-                val navHostFragment = childFragmentManager.findFragmentById(
-                    R.id.article_nav_container) as NavHostFragment
-                navHostFragment.navController.navigate(R.id.articleDetailFragment, arg)
-            }
-            else {
-                findNavController().navigate(
-                    R.id.action_articlesFragment_to_articleDetailActivity, arg)
-            }
-        })
-    }
-
     override fun onStart() {
         super.onStart()
         (activity as MainActivity).setActionBarTitle(getString(R.string.most_populars), false)
@@ -105,8 +87,25 @@ class ArticlesFragment : BaseFragment() {
                 }
                 is DataResource.Failure -> {
                     stopLoading(swipeToRefresh)
-                    onLoadDataFailure(it.errorEntity)
+                    onLoadDataFailure(it.errorMsg)
                 }
+            }
+        })
+    }
+
+    private fun initOnArticleClickLiveData() {
+        adapter.onArticleClickedLiveData.observe(viewLifecycleOwner, Observer {
+            val arg = Bundle()
+            arg.putString(AppConst.INTENT_ITEM_ENTITY, Gson().toJson(it, ArticleEntity::class.java))
+            if (twoPane) {
+                val navHostFragment = childFragmentManager.findFragmentById(
+                    R.id.article_nav_container
+                ) as NavHostFragment
+                navHostFragment.navController.navigate(R.id.articleDetailFragment, arg)
+            } else {
+                findNavController().navigate(
+                    R.id.action_articlesFragment_to_articleDetailActivity, arg
+                )
             }
         })
     }

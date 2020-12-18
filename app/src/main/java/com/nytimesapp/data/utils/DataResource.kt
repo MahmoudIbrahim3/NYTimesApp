@@ -6,5 +6,5 @@ sealed class DataResource<out T> {
 
     object Loading: DataResource<Nothing>()
 
-    data class Failure(val errorEntity: ErrorEntity): DataResource<Nothing>()
+    data class Failure<out T>(val errorMsg: String, val value: T): DataResource<T>()
 }
