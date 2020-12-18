@@ -17,7 +17,7 @@
 package com.nytimesapp.utils
 
 import androidx.lifecycle.LiveData
-import com.nytimesapp.data.remote.api.ApiResponse
+import com.nytimesapp.data.remote.ApiResponse
 import retrofit2.CallAdapter
 import retrofit2.CallAdapter.Factory
 import retrofit2.Retrofit

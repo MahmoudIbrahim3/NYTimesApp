@@ -1,4 +1,4 @@
-package com.nytimesapp.errorhandling
+package com.nytimesapp.data.utils
 
 sealed class DataResource<out T> {
 

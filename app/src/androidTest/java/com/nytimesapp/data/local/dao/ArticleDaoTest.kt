@@ -28,9 +28,4 @@ class ArticleDaoTest: AppDatabaseTest() {
         val articles = appDatabase.articleDao()?.loadMostPopularArticles()?.let { getValue(it) }
         assertEquals(articles?.size, 2)
     }
-
-    @Test
-    fun loadMostPopularArticles() {
-
-    }
 }

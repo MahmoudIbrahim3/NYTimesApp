@@ -6,4 +6,5 @@
     <string name="ok">Ok</string>
     <string name="no_data">No data</string>
     <string name="internet_connection_error">Internet connection error, please check connection or try again later</string>
+    <string name="most_populars">Most Popular</string>
 </resources>

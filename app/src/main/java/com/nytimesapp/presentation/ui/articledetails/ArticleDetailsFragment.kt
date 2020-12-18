@@ -9,10 +9,11 @@ import com.google.gson.Gson
 import com.nytimes.entities.articles.ArticleEntity
 import com.nytimesapp.R
 import com.nytimesapp.di.ViewModelFactory
+import com.nytimesapp.presentation.MainActivity
 import com.nytimesapp.presentation.ui.base.BaseFragment
 import com.nytimesapp.presentation.utils.AppConst
 import dagger.android.support.AndroidSupportInjection
-import kotlinx.android.synthetic.main.activity_articles_item.*
+import kotlinx.android.synthetic.main.fragment_articles_item.*
 import javax.inject.Inject
 
 class ArticleDetailsFragment : BaseFragment() {
@@ -46,6 +47,11 @@ class ArticleDetailsFragment : BaseFragment() {
 
         initViewModel()
         fillDataOnUI()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        (activity as MainActivity).setActionBarTitle(item?.section, true)
     }
 
     private fun fillDataOnUI() {

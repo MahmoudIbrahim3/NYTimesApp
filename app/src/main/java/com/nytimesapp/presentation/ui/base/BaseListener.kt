@@ -2,7 +2,7 @@ package com.nytimesapp.presentation.ui.base
 
 import android.view.View
 import android.widget.EditText
-import com.nytimesapp.errorhandling.ErrorEntity
+import com.nytimesapp.data.utils.ErrorEntity
 import okhttp3.ResponseBody
 
 interface BaseListener {

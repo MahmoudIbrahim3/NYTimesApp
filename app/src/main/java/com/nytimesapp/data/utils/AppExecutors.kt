@@ -1,4 +1,4 @@
-package com.nytimesapp.errorhandling
+package com.nytimesapp.data.utils
 
 import android.os.Handler
 import android.os.Looper

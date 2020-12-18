@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.snackbar.Snackbar
 import com.nytimesapp.data.local.DataManager
-import com.nytimesapp.errorhandling.ErrorEntity
+import com.nytimesapp.data.utils.ErrorEntity
 import com.nytimesapp.R
 import kotlinx.android.synthetic.main.layout_screen_loading.*
 import okhttp3.ResponseBody

@@ -1,13 +1,13 @@
-package com.nytimesapp.errorhandling
+package com.nytimesapp.data.utils
 
 import androidx.annotation.MainThread
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import com.nytimesapp.data.remote.api.ApiEmptyResponse
-import com.nytimesapp.data.remote.api.ApiErrorResponse
-import com.nytimesapp.data.remote.api.ApiResponse
-import com.nytimesapp.data.remote.api.ApiSuccessResponse
+import com.nytimesapp.data.remote.ApiEmptyResponse
+import com.nytimesapp.data.remote.ApiErrorResponse
+import com.nytimesapp.data.remote.ApiResponse
+import com.nytimesapp.data.remote.ApiSuccessResponse
 
 abstract class NetworkBoundResource<ResultType, RequestType>
 @MainThread constructor(private val appExecutors: AppExecutors) {

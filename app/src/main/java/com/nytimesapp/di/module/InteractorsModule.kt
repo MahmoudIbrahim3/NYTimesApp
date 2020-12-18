@@ -5,7 +5,7 @@ import com.nytimesapp.data.repository.ArticlesRepository
 import com.nytimes.core.usecases.GetMostPopularArticles
 import com.nytimesapp.data.local.dao.ArticleDao
 import com.nytimesapp.data.remote.api.ArticlesApi
-import com.nytimesapp.errorhandling.AppExecutors
+import com.nytimesapp.data.utils.AppExecutors
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
