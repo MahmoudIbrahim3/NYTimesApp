@@ -21,13 +21,17 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class ArticlesFragmentTest {
 
+    @Before
+    fun init() {
+        ActivityScenario.launch(MainActivity::class.java)
+    }
+
     @Test
     fun articlesLoadedAndRefreshedProperly() {
-        ActivityScenario.launch(MainActivity::class.java)
 
         onView(withId(R.id.rvArticles)).check(matches(isDisplayed()))
 
-        Thread.sleep(3000)
+        Thread.sleep(5000)
 
         onView(withRecyclerView(R.id.rvArticles)
             .atPositionOnView(1, R.id.tvTitle))
@@ -36,8 +40,18 @@ class ArticlesFragmentTest {
         onView(withId(R.id.swipeToRefresh))
             .perform(withCustomConstraints(swipeDown(), isDisplayingAtLeast(85)))
 
+        Thread.sleep(5000)
+    }
+
+    @Test
+    fun itemOfTheArticlesListClickToShowArticleDetails() {
+
+        Thread.sleep(2000)
+
         onView(withRecyclerView(R.id.rvArticles)
             .atPositionOnView(1, R.id.tvTitle)).perform(click())
+
+        Thread.sleep(2000)
     }
 
     private fun withRecyclerView(recyclerViewId: Int): RecyclerViewMatcher {

@@ -111,6 +111,7 @@ class ArticlesFragment : BaseFragment() {
     }
 
     private fun renderData(articles: List<ArticleEntity>) {
+        adapter.resetItems()
         adapter.addItems(articles)
         adapter.notifyDataSetChanged()
     }

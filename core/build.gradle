@@ -2,7 +2,7 @@ apply plugin: 'java-library'
 apply plugin: 'kotlin'
 
 dependencies {
-    api project(path: ':entities')
+    api project(path: ':entity')
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
