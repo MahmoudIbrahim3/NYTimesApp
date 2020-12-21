@@ -18,7 +18,7 @@ class ArticlesDaoTest: AppDatabaseTest() {
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     @Test
-    fun insertAndLoadMostPopularArticles() {
+    fun test_insertAndLoadMostPopularArticles() {
         val articleEntity1 = ArticleEntity(id = "1")
         val articleEntity2 = ArticleEntity(id = "2")
         val articlesList = arrayListOf(articleEntity1, articleEntity2)

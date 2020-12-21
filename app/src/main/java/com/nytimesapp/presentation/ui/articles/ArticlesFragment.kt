@@ -63,7 +63,13 @@ class ArticlesFragment : BaseFragment() {
 
     override fun onStart() {
         super.onStart()
-        (activity as MainActivity).setActionBarTitle(getString(R.string.most_populars), false)
+        setActionBar()
+    }
+
+    private fun setActionBar() {
+        if(requireActivity() is MainActivity) {
+            (activity as MainActivity).setActionBarTitle(getString(R.string.most_populars), false)
+        }
     }
 
     private fun initViewModel() {
