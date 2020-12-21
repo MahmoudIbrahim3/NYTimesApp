@@ -5,23 +5,23 @@ NYTimesApp
   
   pattern which the project consists of three modules:
 
-1- `app` module: consists of two layers:-
+    1- `app` module: consists of two layers:-
 
-    * Presentation Layer: any thing related to the UI exists in this
-    layer, which the MVVM pattern applied in this layer.
+        * Presentation Layer: any thing related to the UI exists in this
+        layer, which the MVVM pattern applied in this layer.
            
-    * Data Layer: provide the data either from the local database or from the network 
-    using the helper class that called `NetworkBoundResource`.
+        * Data Layer: provide the data either from the local database or from the network 
+        using the helper class that called `NetworkBoundResource`.
        
-2- `core` module: consists of two layers:-
+    2- `core` module: consists of two layers:-
 
-    * Gateways Layer: Abstract definition of all the data sources.
+        * Gateways Layer: Abstract definition of all the data sources.
         
-    * Usecases Layer: defines actions the user can trigger.
+        * Usecases Layer: defines actions the user can trigger.
     
-3- `entity` module: one layer:-
+    3- `entity` module: one layer:-
 
-    * Entity Layer: contains the data classes of the whole App.
+        * Entity Layer: contains the data classes of the whole App.
 
 
 * I applied the dependency injection using `Dagger2`, you will see it in a separate package called `di` .
