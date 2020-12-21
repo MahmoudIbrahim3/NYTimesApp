@@ -30,11 +30,8 @@ NYTimesApp
 
   test exists inside the `ArticlesDaoTest` class.
 
-* I wrote a two UI tests using espresso, one to test the articles list loaded and refreshed 
-
- properly and another one to test the item of the list clicked to show article details, this 
- 
- tests exists inside the `ArticlesFragmentTest` class.
+* I wrote some UI tests using espresso, these tests exists inside the `ArticlesFragmentTest`, 
+    `ArticleDetailsFragmentTest` and `MainActivityTest` classes.
 
 * To generate the coverage report run this command in terminal:
 
